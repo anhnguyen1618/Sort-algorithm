@@ -11,6 +11,7 @@ func main() {
 
 		for !isDone {
 			isSorted := true
+
 			for i := 0; i < size-1; i++ {
 				current := arr[i]
 				next := arr[i+1]
