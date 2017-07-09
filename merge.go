@@ -27,7 +27,7 @@ func sort(arr []int) []int {
 }
 
 /*
-	Merge 2 sorted arrays in ascending order
+  Merge 2 sorted arrays in ascending order
 */
 func merge(leftArr []int, rightArr []int) []int {
 	temp := []int{}
