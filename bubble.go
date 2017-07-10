@@ -10,7 +10,7 @@ func main() {
 		size := len(arr)
 
 		for !isDone {
-			isSorted := true
+			isSorted := true 
 
 			for i := 0; i < size-1; i++ {
 				current := arr[i]
