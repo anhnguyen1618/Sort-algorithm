@@ -8,18 +8,10 @@ func main() {
 	sort := func(arr []int) {
 		size := len(arr)
 		for i := 1; i < size; i++ {
-			for j := 0; j < i; j++ {
-				if arr[i] < arr[j] {
-					current := arr[i]
-
-					//shift all element from index j => i by one position
-					for n := i; n > j; n-- {
-						arr[n] = arr[n-1]
-					}
-					// insert element to the right postion
-					arr[j] = current
-
-				}
+			j := i - 1
+			for j >= 0 && arr[j+1] < arr[j] {
+				arr[j], arr[j+1] = arr[j+1], arr[j]
+				j--
 			}
 		}
 	}
