@@ -10,11 +10,7 @@ func main() {
 
 func sort(arr []int) []int {
 	size := len(arr)
-	if size == 0 {
-		return []int{}
-	}
-
-	if size == 1 {
+	if size == 0 || size == 1 {
 		return arr
 	}
 
