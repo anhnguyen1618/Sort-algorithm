@@ -3,29 +3,35 @@ package main
 import "fmt"
 
 func main() {
-	originalArr := []int{9, 3, 12, 2, 6, 8, 1, 4, 100, 12, 100, 1, 1, 12, 100, 1, 12, 100, 1, 1}
-	newArr := sort(originalArr)
-	fmt.Println(newArr)
+	originalArr := []int{9, 3, 12, 2, 7, 6, 8, 1, 4, 5}
+	quickSort(originalArr)
+	fmt.Println(originalArr)
 }
 
-func sort(arr []int) []int {
-	size := len(arr)
-	if size == 0 || size == 1 {
-		return arr
-	}
-
-	pivot := arr[size-1]
-	leftArr := []int{}
-	rightArr := []int{}
-
-	for i := 0; i < size-1; i++ {
+func partition(arr []int, start int, end int) int {
+	wallIndex := start
+	pivot := arr[end]
+	for i := start; i < end; i++ {
 		currentElement := arr[i]
 		if currentElement < pivot {
-			leftArr = append(leftArr, currentElement)
-		} else {
-			rightArr = append(rightArr, currentElement)
+			arr[wallIndex], arr[i] = currentElement, arr[wallIndex]
+			wallIndex++
 		}
 	}
 
-	return append(append(sort(leftArr), pivot), sort(rightArr)...)
+	arr[wallIndex], arr[end] = pivot, arr[wallIndex]
+	return wallIndex
+}
+
+func sort(arr []int, start int, end int) {
+	if start < end {
+		pivotIndex := partition(arr, start, end)
+
+		sort(arr, start, pivotIndex-1)
+		sort(arr, pivotIndex+1, end)
+	}
+}
+
+func quickSort(arr []int) {
+	sort(arr, 0, len(arr)-1)
 }
