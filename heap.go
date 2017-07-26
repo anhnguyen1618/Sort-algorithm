@@ -10,8 +10,12 @@ func main() {
 }
 
 func heapSort(arr []int) {
-	for size := len(arr); size > 1; size-- {
-		createMaxHeapInRange(arr, size)
+	size := len(arr)
+	createMaxHeapInRange(arr, size)
+	arr[0], arr[size-1] = arr[size-1], arr[0]
+
+	for size = size - 1; size > 1; size-- {
+		maxHeapify(arr, 0, size)
 
 		/*
 		*	Swap first and last element of the remaining heap everytime we decrement the size
