@@ -11,7 +11,7 @@ func main() {
 
 func heapSort(arr []int) {
 	size := len(arr)
-	createMaxHeapInRange(arr, size)
+	createMaxHeap(arr)
 	arr[0], arr[size-1] = arr[size-1], arr[0]
 
 	for size = size - 1; size > 1; size-- {
@@ -26,7 +26,8 @@ func heapSort(arr []int) {
 	}
 }
 
-func createMaxHeapInRange(arr []int, size int) {
+func createMaxHeap(arr []int) {
+	size := len(arr)
 	for i := int((size - 1) / 2); i >= 0; i-- {
 		maxHeapify(arr, i, size)
 	}
