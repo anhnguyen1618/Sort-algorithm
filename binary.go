@@ -9,7 +9,7 @@ type Node struct {
 
 func main() {
 	originalArr := []int{4, 3, 12, 2, 6, 8, 5, 1}
-	originalArr = treeSort(originalArr)
+	treeSort(&originalArr)
 	fmt.Println(originalArr)
 }
 
@@ -40,11 +40,11 @@ func createBinarySearchTree(arr []int) *Node {
 	return root
 }
 
-func treeSort(arr []int) []int {
-	root := createBinarySearchTree(arr)
+func treeSort(arr *[]int) {
+	root := createBinarySearchTree(*arr)
 	tempArr := &[]int{}
 	insertNode(root, tempArr)
-	return *tempArr
+	*arr = *tempArr
 }
 
 func insertNode(node *Node, arr *[]int) {
