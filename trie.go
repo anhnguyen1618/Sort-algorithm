@@ -82,12 +82,15 @@ func (trie *Trie) getValue(value string) string {
 func main() {
 	root := &Node{"", nil, make(map[string]*Node), false, ""}
 	trie := &Trie{root}
-	trie.insert("cat")
-	fmt.Println(trie.getValue("cat"))
-	trie.insert("cata")
-	fmt.Println(trie.getValue("cate"))
-	fmt.Println(trie.getValue("cata"))
+	testWords := []string{"cat", "category", "dog", "foo", "bar"}
+	for _, word := range testWords {
+		trie.insert(word)
+	}
+
 	trie.delete("cat")
-	fmt.Println(trie.getValue("cat"))
-	fmt.Println(trie.getValue("cata"))
+	trie.delete("dog")
+
+	for _, word := range testWords {
+		fmt.Println("value for " + word + " is " + trie.getValue(word))
+	}
 }
