@@ -9,5 +9,6 @@ func main() {
 	graph.LoadData("maze.grh")
 	graph.PrintGraph()
 	fmt.Println("------------------")
-	graph.DepthFirstSearch(0, 15)
+	// graph.DepthFirstSearch(0, 15)
+	graph.Djikstra(12, 5)
 }

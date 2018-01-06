@@ -10,10 +10,24 @@ import (
 type Node struct {
 	IndexPointer int
 	NeighborNode *Node
+	Weight       int
 }
 
 type Graph struct {
 	Data [16]*Node
+}
+
+type Row struct {
+	DistanceFromStart int
+	PreviousNode      int
+}
+
+func (row Row) changeDistanceFromStart(newDistance int) {
+	row.DistanceFromStart = newDistance
+}
+
+func (row Row) changePreviousNodeIndex(newNodeIndex int) {
+	row.PreviousNode = newNodeIndex
 }
 
 func (graph *Graph) LoadData(fileName string) {
@@ -32,7 +46,9 @@ func (graph *Graph) LoadData(fileName string) {
 			if err != nil {
 				fmt.Println(err)
 			}
-			graph.Data[index] = &Node{number, graph.Data[index]}
+
+			oldRootNode := graph.Data[index]
+			graph.Data[index] = &Node{number, oldRootNode, 1}
 		}
 	}
 }
@@ -102,4 +118,90 @@ func (graph *Graph) DepthFirstSearch(from int, to int) {
 		}
 	}
 	fmt.Println(stringBuilder)
+}
+
+func filterOut(unvisited *[]int, node int) {
+	filteredOutput := []int{}
+	for _, value := range *unvisited {
+		if value != node {
+			filteredOutput = append(filteredOutput, value)
+		}
+	}
+	*unvisited = filteredOutput
+}
+
+func (graph *Graph) PreFillTrackTable(from int) map[int]Row {
+	trackTable := make(map[int]Row)
+
+	for index := range graph.Data {
+		if index == from {
+			trackTable[index] = Row{0, -1}
+		} else {
+			trackTable[index] = Row{999999999999999999, -1}
+		}
+	}
+	return trackTable
+}
+
+func (graph *Graph) Djikstra(from int, to int) {
+	unVisited := []int{from}
+	visited := []int{}
+
+	trackTable := graph.PreFillTrackTable(from)
+
+	currentIndex := from
+
+	for len(unVisited) != 0 {
+		filterOut(&unVisited, currentIndex)
+
+		visited = append(visited, currentIndex)
+		currentNode := graph.Data[currentIndex]
+		distanceMappings := make(map[int]int)
+
+		distanceFromStartToRootNode := trackTable[currentIndex].DistanceFromStart
+
+		for currentNode != nil {
+			distanceFromStart := distanceFromStartToRootNode
+			if currentNode.IndexPointer != from {
+				distanceFromStart = distanceFromStartToRootNode + currentNode.Weight
+			}
+
+			if !checkIfNodeIsVisited(&visited, currentNode.IndexPointer) {
+				distanceMappings[currentNode.IndexPointer] = distanceFromStart
+				unVisited = append(unVisited, currentNode.IndexPointer)
+			}
+
+			if distanceFromStart < trackTable[currentNode.IndexPointer].DistanceFromStart {
+				temp := trackTable[currentNode.IndexPointer]
+				temp.DistanceFromStart = distanceFromStart
+				trackTable[currentNode.IndexPointer] = temp
+
+				temp2 := trackTable[currentNode.IndexPointer]
+				temp2.PreviousNode = currentIndex
+				trackTable[currentNode.IndexPointer] = temp2
+			}
+			currentNode = currentNode.NeighborNode
+		}
+
+		smallestNode := currentIndex
+		smallestDistance := 999999999999999999
+
+		for key, value := range distanceMappings {
+			if value < smallestDistance {
+				smallestNode, smallestDistance = key, value
+			}
+		}
+
+		if currentIndex == smallestNode {
+			if len(unVisited) == 0 {
+				break
+			}
+			currentIndex = unVisited[len(unVisited)-1]
+		} else {
+			currentIndex = smallestNode
+		}
+
+	}
+
+	fmt.Println(trackTable)
 }
