@@ -1,3 +1,3 @@
 # Sort-algorithm
 
-Some sort algorithms writen in Golang
+Some  algorithms writen in Golang
